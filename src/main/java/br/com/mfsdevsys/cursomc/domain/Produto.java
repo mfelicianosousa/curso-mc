@@ -3,29 +3,55 @@ package br.com.mfsdevsys.cursomc.domain;
 import java.io.Serializable;
 import java.util.Objects;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="produto")
 public class Produto implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private Integer id;
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Long id;
+	
+	@Column(nullable=false, length=60)
 	private String nome;
+	
+	private String descricao;
+	
 	private Double preco;
+	
+	@Column(nullable=false, length=3)
+	private String unidade;
+	
+	@Column(nullable=true, length=100)
+	private String imageUrl;
 	
 	public Produto() {
 		
 	}
 
-	public Produto(Integer id, String nome,Double preco) {
+	public Produto(Long id, String nome,String descricao,Double preco, String imageUrl, String unidade) {
 		this.id = id;
 		this.nome = nome;
+		this.descricao=descricao;
 		this.preco = preco;
+		this.unidade= unidade;
+		this.imageUrl=imageUrl;
+		
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -39,12 +65,39 @@ public class Produto implements Serializable {
 	
 	
 
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
 	public Double getPreco() {
 		return preco;
 	}
 
 	public void setPreco(Double preco) {
 		this.preco = preco;
+	}
+	
+	
+
+	
+	public String getUnidade() {
+		return unidade;
+	}
+
+	public void setUnidade(String unidade) {
+		this.unidade = unidade;
+	}
+
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
 	}
 
 	@Override
