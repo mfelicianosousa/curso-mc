@@ -1,6 +1,8 @@
 package br.com.mfsdevsys.cursomc.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.Column;
@@ -8,6 +10,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -23,6 +28,7 @@ public class Produto implements Serializable {
 	@Column(nullable=false, length=60)
 	private String nome;
 	
+	@Column(nullable=true)
 	private String descricao;
 	
 	private Double preco;
@@ -32,6 +38,13 @@ public class Produto implements Serializable {
 	
 	@Column(nullable=true, length=100)
 	private String imageUrl;
+	
+	@ManyToMany
+	@JoinTable(name="produto_categoria",
+	   joinColumns=@JoinColumn(name="produto_id"),
+	   inverseJoinColumns=@JoinColumn(name="categoria_id")
+	)
+	private List<Categoria> categorias = new ArrayList<>();
 	
 	public Produto() {
 		
@@ -99,6 +112,14 @@ public class Produto implements Serializable {
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
 	}
+	
+	public List<Categoria> getCategorias() {
+		return categorias;
+	}
+
+	public void setCategorias(List<Categoria> categorias) {
+		this.categorias = categorias;
+	}
 
 	@Override
 	public int hashCode() {
@@ -116,6 +137,8 @@ public class Produto implements Serializable {
 		Produto other = (Produto) obj;
 		return Objects.equals(id, other.id);
 	}
+
+	
 
 
 }

@@ -23,11 +23,11 @@ public class CategoriaResource {
 	private CategoriaService service;
 	
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
-	public ResponseEntity<?> findById(@PathVariable Integer id) {
+	public ResponseEntity<CategoriaDTO> findById(@PathVariable Integer id) {
 		
-		Categoria obj = service.findById(id);
+		CategoriaDTO dto = service.findById(id);
 		
-		return ResponseEntity.ok().body(obj);
+		return ResponseEntity.ok().body(dto);
 		
 	}
 	

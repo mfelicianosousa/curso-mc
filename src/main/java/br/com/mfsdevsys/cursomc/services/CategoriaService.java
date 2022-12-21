@@ -18,12 +18,15 @@ public class CategoriaService {
 	
 	@Autowired
 	private CategoriaRepository repository;
-		
-	public Categoria findById(Integer id) {
+	
+	
+	@Transactional(readOnly=true)	
+	public CategoriaDTO findById(Integer id) {
 		
 		Optional<Categoria> obj = repository.findById(id);
+		Categoria entity = obj.get();
 		
-		return obj.orElse(null);
+		return new CategoriaDTO(entity);
 	}
 	
 	@Transactional(readOnly=true)
