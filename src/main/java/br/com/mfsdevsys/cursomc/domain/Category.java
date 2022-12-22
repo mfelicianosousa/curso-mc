@@ -13,9 +13,11 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
-@Table(name="categoria")
-public class Categoria implements Serializable {
+@Table(name="category")
+public class Category implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -24,18 +26,19 @@ public class Categoria implements Serializable {
 	private Integer id;
 	
 	@Column(nullable=false, length =60)
-	private String nome;
+	private String name;
 	
-	@ManyToMany(mappedBy="categorias")
-	private List<Produto> produtos = new ArrayList<>();
+	@JsonManagedReference
+	@ManyToMany(mappedBy="categories")
+	private List<Product> products = new ArrayList<>();
 	
-	public Categoria() {
+	public Category() {
 		
 	}
 
-	public Categoria(Integer id, String nome) {
+	public Category(Integer id, String name) {
 		this.id = id;
-		this.nome = nome;
+		this.name = name;
 	}
 
 	public Integer getId() {
@@ -46,20 +49,24 @@ public class Categoria implements Serializable {
 		this.id = id;
 	}
 
-	public String getNome() {
-		return nome;
+	
+	
+	public String getName() {
+		return name;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setName(String name) {
+		this.name = name;
 	}
 	
-	public List<Produto> getProdutos() {
-		return produtos;
+	
+
+	public List<Product> getProducts() {
+		return products;
 	}
 
-	public void setProdutos(List<Produto> produtos) {
-		this.produtos = produtos;
+	public void setProducts(List<Product> products) {
+		this.products = products;
 	}
 
 	@Override
@@ -75,13 +82,8 @@ public class Categoria implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Categoria other = (Categoria) obj;
+		Category other = (Category) obj;
 		return Objects.equals(id, other.id);
 	}
-
-	
-
-	
-	
 
 }
