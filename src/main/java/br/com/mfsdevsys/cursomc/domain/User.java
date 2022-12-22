@@ -11,12 +11,17 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
-@Table(name="user")
+@Table(name="users")
 public class User implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -44,6 +49,11 @@ public class User implements Serializable {
 	@Column(name="updated_at",columnDefinition ="TIMESTAMP WITHOUT TIME ZONE")
 	private Instant updatedAt;
 	
+	@JsonBackReference
+	@ManyToMany
+	@JoinTable(name="user_role",
+	   joinColumns=@JoinColumn(name="user_id"),
+	   inverseJoinColumns=@JoinColumn(name="role_id"))
 	private Set<Role> roles = new HashSet<>();
 
 	public User() {
