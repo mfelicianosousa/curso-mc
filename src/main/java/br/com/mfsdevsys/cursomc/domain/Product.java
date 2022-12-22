@@ -14,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -43,8 +45,11 @@ public class Product implements Serializable {
 	@Column(nullable=true, length=100)
 	private String imageUrl;
 	
-	@Column(name="date_created")
-	private Instant dateCreated;
+	@Column(columnDefinition ="TIMESTAMP WITHOUT TIME ZONE")
+	private Instant createdAt;
+	
+	@Column(columnDefinition ="TIMESTAMP WITHOUT TIME ZONE")
+	private Instant updatedAt;
 	
 	@JsonBackReference
 	@ManyToMany
@@ -56,6 +61,23 @@ public class Product implements Serializable {
 	
 	public Product() {
 		
+	}
+	
+	public Product(Long id, String name, String description, Double salePrice, String unitOfMeasure, String imageUrl) {
+		this.id = id;
+		this.name = name;
+		this.description = description;
+		this.salePrice = salePrice;
+		this.unitOfMeasure = unitOfMeasure;
+		this.imageUrl = imageUrl;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getName() {
@@ -98,35 +120,24 @@ public class Product implements Serializable {
 		this.imageUrl = imageUrl;
 	}
 
-	public Instant getDateCreated() {
-		return dateCreated;
+	public Instant getCreatedAt() {
+		return createdAt;
 	}
 
-	public void setDateCreated(Instant dateCreated) {
-		this.dateCreated = dateCreated;
+	public Instant getUpdatedAt() {
+		return updatedAt;
 	}
 
-	public Product(Long id, String name, String description, Double salePrice, String unitOfMeasure, String imageUrl,
-			Instant dateCreated) {
-		this.id = id;
-		this.name = name;
-		this.description = description;
-		this.salePrice = salePrice;
-		this.unitOfMeasure = unitOfMeasure;
-		this.imageUrl = imageUrl;
-		this.dateCreated = dateCreated;
+	@PrePersist
+	public void prePersist() {
+		createdAt = Instant.now();
 	}
-
-
-
-	public Long getId() {
-		return id;
+	
+	@PreUpdate
+	public void preUpdate() {
+		updatedAt = Instant.now();
 	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
+	
 	public Set<Category> getCategories() {
 		return categories;
 	}

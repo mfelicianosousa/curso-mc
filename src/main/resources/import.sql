@@ -1,7 +1,7 @@
-INSERT INTO category(name) values ('Eletronico');
-INSERT INTO category(name) values ('Escritorio');
-INSERT INTO category(name) values ('Computadores');
-INSERT INTO category(name) values ('Livros');
+INSERT INTO category(name, created_at) values ('Eletronico', NOW());
+INSERT INTO category(name, created_at) values ('Escritorio', NOW());
+INSERT INTO category(name, created_at) values ('Computadores', NOW());
+INSERT INTO category(name, created_at) values ('Livros', NOW());
 INSERT INTO product(name, sale_price, unit_measure) values ('Smart TV',2900,'UN');
 INSERT INTO product(name, sale_price, unit_measure) values ('Mackbook Pro',1250,'UN');
 INSERT INTO product(name, sale_price, unit_measure) values ('Pc Gamer',1250,'UN');

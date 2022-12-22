@@ -26,8 +26,6 @@ public class ProductDTO implements Serializable {
 	
 	private String imageUrl;
 	
-	private Instant dateCreated;
-	
 	private List<CategoryDTO> categories = new ArrayList<>();
 	
 	public ProductDTO() {
@@ -36,15 +34,13 @@ public class ProductDTO implements Serializable {
 
 	
 	
-	public ProductDTO(Long id, String name, String description, Double salePrice, String unitOfMeasure, String imageUrl,
-			Instant dateCreated) {
+	public ProductDTO(Long id, String name, String description, Double salePrice, String unitOfMeasure, String imageUrl) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.salePrice = salePrice;
 		this.unitOfMeasure = unitOfMeasure;
 		this.imageUrl = imageUrl;
-		this.dateCreated = dateCreated;
 	}
 
 	public ProductDTO( Product entity )
@@ -55,8 +51,7 @@ public class ProductDTO implements Serializable {
 		this.salePrice = entity.getSalePrice();
 		this.unitOfMeasure= entity.getUnitOfMeasure();
 		this.imageUrl= entity.getImageUrl();
-		this.dateCreated= entity.getDateCreated();
-		
+	
 	}
 
 	public ProductDTO( Product entity, Set<Category> categories)
@@ -120,8 +115,6 @@ public class ProductDTO implements Serializable {
 		this.unitOfMeasure = unitOfMeasure;
 	}
 
-
-
 	public String getImageUrl() {
 		return imageUrl;
 	}
@@ -131,20 +124,6 @@ public class ProductDTO implements Serializable {
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
 	}
-
-
-
-	public Instant getDateCreated() {
-		return dateCreated;
-	}
-
-
-
-	public void setDateCreated(Instant dateCreated) {
-		this.dateCreated = dateCreated;
-	}
-
-
 
 	public List<CategoryDTO> getCategories() {
 		return categories;
