@@ -1,8 +1,6 @@
 package br.com.mfsdevsys.cursomc.services;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -11,16 +9,15 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import br.com.mfsdevsys.cursomc.domain.Category;
 import br.com.mfsdevsys.cursomc.domain.Product;
 import br.com.mfsdevsys.cursomc.dto.CategoryDTO;
 import br.com.mfsdevsys.cursomc.dto.ProductDTO;
+import br.com.mfsdevsys.cursomc.repositories.CategoryRepository;
 import br.com.mfsdevsys.cursomc.repositories.ProductRepository;
 import br.com.mfsdevsys.cursomc.services.exceptions.DatabaseException;
 import br.com.mfsdevsys.cursomc.services.exceptions.ResourceNotFoundException;
@@ -30,6 +27,8 @@ public class ProductService {
 	
 	@Autowired
 	private ProductRepository repository;
+	@Autowired
+	private CategoryRepository categoryRepository;
 	
 	@Transactional(readOnly=true)
 	public Page<ProductDTO> findAllPaged(PageRequest pageRequest){
@@ -52,16 +51,7 @@ public class ProductService {
 	@Transactional
 	public ProductDTO insert(@RequestBody ProductDTO dto){
 		Product entity = new Product();
-		entity.setName(dto.getName());
-		entity.setDescription(dto.getDescription());
-		entity.setSalePrice(dto.getSalePrice());
-		entity.setUnitOfMeasure(dto.getUnitOfMeasure());
-		
-		for (CategoryDTO cat: dto.getCategories()) {
-			Category category = new Category();
-			category.setId(cat.getId());
-			entity.getCategories().add(category);
-		}
+		copyDtoToEntity(dto, entity);
 		entity = repository.save(entity) ;
 		return new ProductDTO(entity);
 	}
@@ -71,10 +61,7 @@ public class ProductService {
 	public ProductDTO update(Long id, ProductDTO dto) {
 		try {
 			Product entity = repository.getReferenceById(id);
-			entity.setName(dto.getName());
-			entity.setDescription(dto.getDescription());
-			entity.setSalePrice(dto.getSalePrice());
-			entity.setUnitOfMeasure(dto.getUnitOfMeasure());
+			copyDtoToEntity(dto, entity);
 			entity = repository.save(entity);
 			return new ProductDTO(entity);
 		} catch (EntityNotFoundException e) {
@@ -83,6 +70,7 @@ public class ProductService {
 
 	}
 
+	
 	public void delete(Long id) {
 		try {
 			repository.deleteById(id);
@@ -90,6 +78,20 @@ public class ProductService {
 			throw new ResourceNotFoundException("Id not found "+id);
 		} catch(DataIntegrityViolationException e) {
 			throw new DatabaseException("Integrity violation");
+		}
+	}
+	
+	private void copyDtoToEntity(ProductDTO dto, Product entity) {
+		entity.setName(dto.getName());
+		entity.setDescription(dto.getDescription());
+		entity.setSalePrice(dto.getSalePrice());
+		entity.setUnitOfMeasure(dto.getUnitOfMeasure());
+		entity.setImageUrl(dto.getImageUrl());
+		
+		entity.getCategories().clear();
+		for (CategoryDTO categoryDTO: dto.getCategories()) {
+			Category category = categoryRepository.getOne(categoryDTO.getId()) ;
+			entity.getCategories().add(category);
 		}
 	}
 	
