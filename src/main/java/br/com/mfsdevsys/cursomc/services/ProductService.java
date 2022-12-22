@@ -16,7 +16,7 @@ import br.com.mfsdevsys.cursomc.domain.Product;
 import br.com.mfsdevsys.cursomc.dto.CategoryDTO;
 import br.com.mfsdevsys.cursomc.dto.ProductDTO;
 import br.com.mfsdevsys.cursomc.repositories.ProductRepository;
-import br.com.mfsdevsys.cursomc.services.exceptions.EntityNotFoundException;
+import br.com.mfsdevsys.cursomc.services.exceptions.ResourceNotFoundException;
 
 @Service
 public class ProductService {
@@ -28,7 +28,7 @@ public class ProductService {
 	public ProductDTO findById(Long id) {
 		
 		Optional<Product> obj = repository.findById(id);
-		Product entity = obj.orElseThrow(()-> new EntityNotFoundException("Entity not found"));
+		Product entity = obj.orElseThrow(()-> new ResourceNotFoundException("Entity not found"));
 		
 		return new ProductDTO(entity);
 	}
