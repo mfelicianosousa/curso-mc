@@ -11,25 +11,32 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 @Entity
-@Table(name="category")
-public class Category implements Serializable {
+@Table(name="user")
+public class User implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Integer id;
-	
+	private Long id;
 	@Column(nullable=false, length =60)
-	private String name;
+	private String firstName;
+	
+	@Column(nullable=true, length =60)
+	private String lastName;
+	
+	@Column(nullable=false, length =100)
+	private String email;
+	
+	private Boolean status;
+	
+	@Column(nullable=false)
+	private String password;
 	
 	@Column(name="created_at",columnDefinition ="TIMESTAMP WITHOUT TIME ZONE")
 	private Instant createdAt;
@@ -37,35 +44,68 @@ public class Category implements Serializable {
 	@Column(name="updated_at",columnDefinition ="TIMESTAMP WITHOUT TIME ZONE")
 	private Instant updatedAt;
 	
-	@JsonManagedReference
-	@ManyToMany(mappedBy="categories")
-	private Set<Product> products = new HashSet<>();
+	private Set<Role> roles = new HashSet<>();
+
+	public User() {
+	}
 	
-	public Category() {
-		
-	}
-
-	public Category(Integer id, String name) {
+	public User(Long id, String firstName, String lastName, String email, Boolean status, String password) {
 		this.id = id;
-		this.name = name;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.status = status;
+		this.password = password;
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public String getFirstName() {
+		return firstName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
-	
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public Boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(Boolean status) {
+		this.status = status;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+		
 	public Instant getCreatedAt() {
 		return createdAt;
 	}
@@ -73,7 +113,12 @@ public class Category implements Serializable {
 	public Instant getUpdatedAt() {
 		return updatedAt;
 	}
+	
+	
 
+	public Set<Role> getRoles() {
+		return roles;
+	}
 
 	@PrePersist
 	public void prePersist() {
@@ -84,13 +129,7 @@ public class Category implements Serializable {
 	public void preUpdate() {
 		updatedAt = Instant.now();
 	}
-
 	
-
-	public Set<Product> getProducts() {
-		return products;
-	}
-
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
@@ -104,7 +143,7 @@ public class Category implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Category other = (Category) obj;
+		User other = (User) obj;
 		return Objects.equals(id, other.id);
 	}
 
