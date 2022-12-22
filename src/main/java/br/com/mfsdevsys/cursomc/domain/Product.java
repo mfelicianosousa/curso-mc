@@ -33,7 +33,7 @@ public class Product implements Serializable {
 	@Column(nullable=false, length=60)
 	private String name;
 	
-	@Column(nullable=true)
+	@Column(columnDefinition="TEXT", nullable=true )
 	private String description;
 	
 	@Column(name="sale_price")
@@ -55,15 +55,19 @@ public class Product implements Serializable {
 	@ManyToMany
 	@JoinTable(name="product_category",
 	   joinColumns=@JoinColumn(name="product_id"),
-	   inverseJoinColumns=@JoinColumn(name="category_id")
-	)
+	   inverseJoinColumns=@JoinColumn(name="category_id"))
 	private Set<Category> categories = new HashSet<>();
 	
-	public Product() {
-		
+	public Product() {		
 	}
 	
-	public Product(Long id, String name, String description, Double salePrice, String unitOfMeasure, String imageUrl) {
+	public Product(Long id, 
+			String name, 
+			String description, 
+			Double salePrice, 
+			String unitOfMeasure,
+			String imageUrl
+		) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
@@ -140,10 +144,6 @@ public class Product implements Serializable {
 	
 	public Set<Category> getCategories() {
 		return categories;
-	}
-
-	public void setCategories(Set<Category> categories) {
-		this.categories = categories;
 	}
 
 	@Override
